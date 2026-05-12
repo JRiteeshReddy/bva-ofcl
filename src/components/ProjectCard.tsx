@@ -10,12 +10,6 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project }: ProjectCardProps) => {
-  const [mounted, setMounted] = React.useState(false);
-  
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // Simple deterministic "hash" for the ID
   const displayId = project.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 1000;
 
@@ -28,7 +22,7 @@ const ProjectCard = ({ project }: ProjectCardProps) => {
     >
       {/* Tech Accents */}
       <div className="absolute top-4 right-4 z-20 font-mono text-[8px] text-white/20 tracking-tighter hidden group-hover:block transition-all">
-        REF_ID: {project.category.substring(0, 3)}_{mounted ? displayId : '---'}
+        REF_ID: {project.category.substring(0, 3)}_{displayId}
       </div>
 
       <div className="aspect-[16/10] overflow-hidden relative">

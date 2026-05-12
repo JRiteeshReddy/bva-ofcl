@@ -37,7 +37,7 @@ export default async function Home() {
           <div className="mb-24">
             <div className="flex items-center gap-4 text-white/30 font-mono text-[10px] uppercase tracking-[0.5em] mb-6">
               <div className="w-12 h-[1px] bg-white/20" />
-              Sector_02 // Archive
+              {"Sector_02 // Archive"}
             </div>
             <h2 className="text-6xl md:text-8xl font-bold tracking-tighter text-white leading-none">
               The <br /> <span className="text-white/40">Mission Log</span>
@@ -52,7 +52,7 @@ export default async function Home() {
             ) : (
               <div className="h-64 flex items-center justify-center border border-white/5 rounded-2xl bg-white/[0.01]">
                 <p className="text-brand-grey-500 font-mono text-sm tracking-widest uppercase">
-                  Log Entry Empty // Initializing Data Stream...
+                  {"Log Entry Empty // Initializing Data Stream..."}
                 </p>
               </div>
             )}
@@ -108,9 +108,9 @@ export default async function Home() {
             <div>
               <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/20 mb-8">Navigation</h4>
               <ul className="space-y-4 text-sm font-medium text-brand-grey-500 uppercase tracking-widest">
-                <li><a href="#about" className="hover:text-white transition-colors">// About</a></li>
-                <li><a href="#projects" className="hover:text-white transition-colors">// Projects</a></li>
-                <li><a href="#events" className="hover:text-white transition-colors">// Events</a></li>
+                <li><a href="#about" className="hover:text-white transition-colors">{"// About"}</a></li>
+                <li><a href="#projects" className="hover:text-white transition-colors">{"// Projects"}</a></li>
+                <li><a href="#events" className="hover:text-white transition-colors">{"// Events"}</a></li>
               </ul>
             </div>
 

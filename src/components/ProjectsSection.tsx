@@ -1,12 +1,12 @@
 "use client";
 
 import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import SectionHeading from './SectionHeading';
+import { motion, useScroll } from 'framer-motion';
 import ScrollSequence from './ScrollSequence';
+import type { Project } from '@/lib/data';
 
 interface ProjectsSectionProps {
-  featuredProjects: any[];
+  featuredProjects: Project[];
 }
 
 const ProjectsSection = ({ featuredProjects }: ProjectsSectionProps) => {
@@ -40,6 +40,7 @@ const ProjectsSection = ({ featuredProjects }: ProjectsSectionProps) => {
                 initial={{ opacity: 0, x: -50 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
+                style={{ willChange: 'transform, opacity' }}
                 className="space-y-6"
               >
                 <div className="flex items-center gap-4 text-white/30 font-mono text-[10px] uppercase tracking-[0.5em]">
@@ -57,11 +58,12 @@ const ProjectsSection = ({ featuredProjects }: ProjectsSectionProps) => {
               {/* Individual Projects Staggered */}
               {projectsToDisplay.map((project, index) => (
                 <motion.div
-                  key={project.id || index}
+                  key={index}
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
                   viewport={{ margin: "-100px" }}
+                  style={{ willChange: 'transform, opacity' }}
                   className="relative group"
                 >
                   {/* Digital Marker */}

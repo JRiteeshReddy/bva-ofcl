@@ -16,6 +16,7 @@ const BackgroundEffect = () => {
           repeat: Infinity,
           ease: "linear"
         }}
+        style={{ willChange: 'transform' }}
         className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-white/[0.01] rounded-full blur-[120px]"
       />
       <motion.div 
@@ -28,6 +29,7 @@ const BackgroundEffect = () => {
           repeat: Infinity,
           ease: "linear"
         }}
+        style={{ willChange: 'transform' }}
         className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-white/[0.01] rounded-full blur-[120px]"
       />
       

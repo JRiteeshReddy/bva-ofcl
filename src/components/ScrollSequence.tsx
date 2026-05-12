@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
+import { useScroll, useTransform, useSpring, MotionValue } from 'framer-motion';
 
 interface ScrollSequenceProps {
   progress?: MotionValue<number>;
@@ -9,26 +9,33 @@ interface ScrollSequenceProps {
 
 const ScrollSequence = ({ progress }: ScrollSequenceProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [images, setImages] = useState<string[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const [loaded, setLoaded] = useState(false);
   
   const frameCount = 46;
   
-  // Create an array of image paths
+  // Pre-load images into refs
   useEffect(() => {
-    const paths = Array.from({ length: frameCount }, (_, i) => {
-      const frameNumber = i.toString().padStart(2, '0');
-      return `/frames/frame_${frameNumber}_delay-0.08s.gif`;
-    });
-    setImages(paths);
-    
-    // Pre-load images
-    paths.forEach((path) => {
+    let loadedCount = 0;
+    const images: HTMLImageElement[] = [];
+
+    for (let i = 0; i < frameCount; i++) {
       const img = new Image();
-      img.src = path;
-    });
+      const frameNumber = i.toString().padStart(2, '0');
+      img.src = `/frames_optimized/frame_${frameNumber}.webp`;
+      img.onload = () => {
+        loadedCount++;
+        if (loadedCount === frameCount) {
+          setLoaded(true);
+        }
+      };
+      images.push(img);
+    }
+    imagesRef.current = images;
   }, []);
 
-  // Internal scroll if no progress prop is passed (fallback)
   const { scrollYProgress: internalProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
@@ -36,43 +43,75 @@ const ScrollSequence = ({ progress }: ScrollSequenceProps) => {
 
   const activeProgress = progress || internalProgress;
 
-  // Smooth out the scroll progress
   const smoothProgress = useSpring(activeProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });
 
-  // Map progress to frame index
   const currentIndex = useTransform(smoothProgress, [0, 1], [0, frameCount - 1]);
-  
-  // State to hold the integer frame index
-  const [frame, setFrame] = useState(0);
 
   useEffect(() => {
-    return currentIndex.onChange((v) => {
-      setFrame(Math.round(v));
+    const drawImage = (index: number) => {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext('2d');
+      const img = imagesRef.current[index];
+
+      if (ctx && img && canvas) {
+        // Clear and draw
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.save();
+        // Scale and mirror as in original
+        ctx.scale(-1, 1);
+        
+        const scale = 0.85;
+        const width = canvas.width * scale;
+        const height = canvas.height * scale;
+        const x = -canvas.width + (canvas.width - width) / 2;
+        const y = (canvas.height - height) / 2;
+
+        // Apply grayscale and opacity
+        ctx.filter = 'grayscale(100%) opacity(90%)';
+        ctx.drawImage(img, x, y, width, height);
+        ctx.restore();
+
+        // Update text ref directly without re-render
+        if (textRef.current) {
+          textRef.current.innerText = `SYSTEM_SYNC // FRAME_${index.toString().padStart(2, '0')}`;
+        }
+      }
+    };
+
+    const unsubscribe = currentIndex.on("change", (v) => {
+      drawImage(Math.round(v));
     });
-  }, [currentIndex]);
+    
+    if (loaded) {
+      drawImage(Math.round(currentIndex.get()));
+    }
+
+    return () => unsubscribe();
+  }, [currentIndex, loaded]);
 
   return (
     <div ref={containerRef} className="relative h-full w-full flex justify-end items-center">
       <div className="relative w-[140%] h-full overflow-hidden translate-x-[35%]">
-        {images.length > 0 && (
-          <motion.img
-            src={images[frame]}
-            alt="Scroll Sequence"
-            style={{ scaleX: -1, scale: 0.85 }}
-            className="w-full h-full object-contain grayscale opacity-90 transition-opacity duration-300"
-          />
-        )}
+        <canvas
+          ref={canvasRef}
+          width={1000}
+          height={1000}
+          className="w-full h-full object-contain"
+          style={{ willChange: 'transform' }}
+        />
         
-        {/* Galaxy Feathering Mask */}
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle,transparent_50%,#000_100%)]" />
         
-        {/* Tech Accents for the sequence */}
-        <div className="absolute top-12 right-12 font-mono text-[10px] text-white/30 uppercase tracking-[0.4em] z-30">
-          SYSTEM_SYNC // FRAME_{frame.toString().padStart(2, '0')}
+        <div 
+          ref={textRef}
+          className="absolute top-12 right-12 font-mono text-[10px] text-white/30 uppercase tracking-[0.4em] z-30"
+        >
+          SYSTEM_SYNC // FRAME_00
         </div>
       </div>
     </div>

@@ -8,7 +8,7 @@ const Hero = () => {
   return (
     <section id="home" className="min-h-screen flex flex-col justify-center items-center px-6 relative overflow-hidden pt-20">
       {/* Background Video */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0" style={{ willChange: 'opacity' }}>
         <video 
           autoPlay 
           loop 
@@ -30,6 +30,7 @@ const Hero = () => {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{ willChange: 'transform, opacity' }}
           className="text-left max-w-3xl"
         >
           <motion.span 

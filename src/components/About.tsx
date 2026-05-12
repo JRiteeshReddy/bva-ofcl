@@ -13,7 +13,7 @@ const About = () => {
             <div className="relative aspect-[16/10] overflow-hidden">
               <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle,transparent_40%,black_100%)]" />
               <img 
-                src="/video1.gif" 
+                src="/video1_optimized.webp" 
                 alt="BVA Innovation" 
                 className="w-full h-full object-cover grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-1000 scale-110 group-hover:scale-100"
               />
@@ -48,7 +48,7 @@ const About = () => {
                 transition={{ delay: 0.2 }}
                 className="pl-8 border-l border-white/10 max-w-md"
               >
-                We believe that the best way to learn is by doing. Our community brings together developers, designers, and innovators to work on real-world challenges.
+                We&apos;re not just another student club. We are a high-frequency node for developers who want to push boundaries. Bangalore is our playground, and innovation is our currency.
               </motion.p>
               
               <motion.p 
@@ -58,7 +58,7 @@ const About = () => {
                 transition={{ delay: 0.4 }}
                 className="pl-16 max-w-md italic"
               >
-                "From building AI-driven apps to hosting intense 48-hour hackathons, we focus on execution and measurable impact."
+                &quot;From building AI-driven apps to hosting intense 48-hour hackathons, we focus on execution and measurable impact.&quot;
               </motion.p>
             </div>
           </div>
